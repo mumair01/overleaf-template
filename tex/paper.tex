@@ -1,315 +1,137 @@
-
-
-\newcommand{\turn}{U}
-\newcommand{\word}[1]{w_{#1}}
-\newcommand{\rword}[1]{\tilde{w}_{#1}}
-\newcommand{\turnLen}{N}
-\newcommand{\respLen}{M}
-\newcommand{\prefix}[1]{P_{#1}}
-\newcommand{\prefixes}{\mathcal{P}_\stimulus}
-\newcommand{\TRP}[1]{T_{#1}}
-\newcommand{\vocab}{L}
-\newcommand{\TRPs}{\mathcal{T}_{\response, \stimulus}}
-\newcommand{\TRPsPrediction}{\TRPs^{Predicted}}
-\newcommand{\TRPsParticipants}{\TRPs^{Participants}}
-\newcommand{\stimulus}{S}
-\newcommand{\response}{R}
-\newcommand{\wordStart}[1]{t_{\word{#1}}^s}
-\newcommand{\wordEnd}[1]{t_{\word{#1}}^e}
-\newcommand{\wordMid}[1]{t_{\word{#1}}^m}
-\newcommand{\rwordStart}[1]{t_{\rword{#1}}^s}
-\newcommand{\rwordEnd}[1]{t_{\rword{#1}}^e}
-\newcommand{\rwordMid}[1]{t_{\rword{#1}}^m}
-\newcommand{\interval}[2]{I_{#1#2}}
-\newcommand{\intervals}[1]{\mathcal{I}_{#1}}
-\newcommand{\intervalProportion}[2]{\interval{#1}{#2}^{Proportion}}
-\newcommand{\participant}[1]{a_{#1}}
-\newcommand{\participants}{A}
-\newcommand{\Distance}{\mathcal{D}_{\stimulus}}
+\section{First Level Heading}
 
 
 
+Please lay out your article using the section headings and example objects below, and remember to delete all help text prior to submitting your article to the journal.
 
 
-\section{Introduction}
-\label{sec:intro}
+\subsection{Second Level Heading}
+If data, scripts or other artefacts used to generate the analyses presented in the article are available via a publicly available data repository, please include a reference to the location of the material within the article.
 
-When humans interact verbally, they avoid speaking simultaneously and take turns to speak and listen, a process essential for mutual understanding and smooth communication \citep{stivers2009universals, deRuiter2019TurnTaking}. Unlike in formal settings with pre-assigned roles, in everyday conversation participants decide when to speak or listen on a per-turn basis \citep*{sacks1974simplest}. This \textit{local management system} hinges on conversationalists' ability to recognize and anticipate so-called \textit{Transition Relevance Places} (TRPs), which are points in the speaker's utterance where a listener could take over the role of speaker. To anticipate and recognize TRPs people use various lexico-syntactic, contextual, and intonational cues \citep{deRuiter2006ProjectingTheEnd, boegels2021cues}.
+% Equations should be inserted using standard LaTeX equation and eqnarray environments, not as graphics, and should be set in the main text
+This is an equation, numbered
+\begin{equation}
+       \int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt{\pi}}{2}
+\end{equation}
+And one that is not numbered
+\begin{equation*}
+       e^{i\pi}=-1
+\end{equation*}
 
-The ability to predict TRPs is therefore crucial for artificial conversational agents, as it enables them to take turns and provide verbal feedback signals with socially appropriate timing. Recent advances in Large Language Models (LLMs) have sparked interest in leveraging these models to improve turn-taking in Spoken Dialogue Systems (SDS) \citep{Ni2021RecentAI}. Approaches like TurnGPT and RC-TurnGPT introduce probabilistic models to predict TRPs using contextual and speaker-identity information \citep{ekstedt2020turngpt, jiang-etal-2023-response}. However, these models struggle with unscripted interactions, often resulting in long silences or poorly timed feedback \cite{skantze2021turnreview}.
+\subsection{Document class options}
 
-There are two critical issues with the current approaches. One is the optimistic assumption that LLMs that are trained predominantly on written language can generalize to spoken dialogue \citep{MAHOWALD2024}. A second and arguably more fundamental problem is that in dialogue corpora we can only unambiguously identify TRPs that occur with speaker switches, but not when TRPs occur \textit{without} a speaker switch (i.e., within a speaker's turn). This means that we have no ``ground truth'' data about these ``silent'' TRPs. Having reliable data about this ground truth would allow us to evaluate and improve our spoken dialogue systems.
+The \texttt{wiley-article} document class offers the following options:
 
-In this study, we address both of these issues. First, we collected a new and unique empirical dataset\footnote{Our dataset and processing code along with the elicitation protocol will be made publicly available upon publication.} based on human responses that allows us to identify and localize within-turn TRPs in recordings of natural conversation. Second, we used this dataset to evaluate how well current state-of-the art LLMs can predict these TRPs. This ability is important, as it would enable dialogue systems to initiate their turns and provide feedback with correct, human-like timing.
+\begin{description}
+       \item[\texttt{blind}] Anonymise all author, affiliation, correspondence
+             and funding information.
 
+       \item[\texttt{lineno}] Adds line numbers.
 
-% Introduction to the problem: smooth-turn taking and its importance. 
-\section{Theoretical Background}
+       \item[\texttt{serif}] Sets the body font to be serif.
 
-When humans verbally interact with each other, they avoid speaking at the same time, and take turns speaking and listening. This allows them to respond sequentially to each other's utterances \citep{stivers2009universals, deRuiter2019TurnTaking}, and facilitates mutual comprehensibility \citep{Duncan1972SomeSignals}. However, in natural conversation, the alternation between speaker and listener roles is not managed by having pre-assigned time slots or a chairperson, like in more formal interactions (e.g., court proceedings or business meetings). Rather, it is a \textit{locally managed} system \citep*{sacks1974simplest}. This means that speaker selection is managed by the participants themselves, on a per-turn basis. But how can participants in conversations manage to avoid speaking at the same time, or having long silences in which they are waiting for one another?
+       \item[\texttt{twocolumn}] Sets the body text in two-column layout.
 
-This is why conversationalists follow the rules of turn-taking as outlined in \citet{sacks1974simplest} \citep[see also][]{Levinson1983Pragmatics, deRuiter2019TurnTaking}. This local management system crucially depends on \citeauthor{sacks1974simplest}'s notion of the \textit{Transition Relevance Place} (TRP), which is a position in the current speaker's utterance at which a next speaker can, but is not obliged to, take over the role of speaker. Importantly, even the very short feedback-like turns like ``hm-mm'', called \textit{backchannels} \citep{yngve1970backchannel} or \textit{continuers} \citep{schegloff1982discourse}, are  only produced by listeners at TRPs. In the turn-taking literature, an important distinction is made between a \textit{turn}, which is the entire contribution by one speaker, and a \textit{Turn Constructional Unit} (TCU), which is an utterance by the speaker upto a TRP. A turn can consist of multiple TCUs, because at a TRP, the listener is not obliged to take over the floor. This also means that in a corpus of spoken dialogue, it is easy to identify the turn-final TRP, because that is where another speaker takes over the turn, but difficult to identify turn-medial TRPs (where the same speaker continues) because there is no overt recorded behavior that suggests the presence of a TRP.
+       \item[\texttt{num-refs}] Uses the numerical Vancouver bibliography style; see section \ref{sec:bibstyles}.
 
-To function, this local management system crucially relies on the listener's ability to not only recognize, but also \textit{anticipate} the occurrence of a TRP in the current speaker's contribution ahead of time \cite{riest2015anticipation}. To accomplish this timely anticipation, listeners predominantly use lexico-syntactic \citep{deRuiter2006ProjectingTheEnd}, but also contextual and intonational cues \citep{boegels2021cues}. Listeners process these cues incrementally to predict (or project) TRPs. Importantly, this ability is also required in artificial conversational agents, to enable them to a) take over the floor at the appropriate moment, and b) to provide supportive verbal feedback to the listener with normatively correct timing.
+       \item[\texttt{alpha-refs}] Uses the author-year RSS bibliography style; see section \ref{sec:bibstyles}.
+\end{description}
 
-\section{Related work}
-Inspired by research on human turn-taking and advances in language processing through the successful application of predictive language models, there has been a recent focus on improving smooth turn-taking in Spoken Dialogue Systems (SDS) \citep{Ni2021RecentAI}. Specifically, these recent approaches have sought to leverage linguistic knowledge learned by Large Language Models (LLMs). For example, TurnGPT introduces a probabilistic notion of TRPs that is operationalized by introducing turn-shift tokens that can be predicted using contextual as well as speaker-identity information \citep{ekstedt2020turngpt}. RC-TurnGPT is an extension of this model that conditions the probability of turn-shift tokens based on potential upcoming interlocutor responses, thereby taking their intention into account \citep{jiang-etal-2023-response}. However, these methods so far do not generalize well to corpora of unscripted dialogue. As a consequence, current dialogue systems systems still tend to produce long silences and produce ill-timed feedback signals \cite{skantze2021turnreview}.
+\subsection{Adding Citations and a References List}
+\label{sec:bibstyles}
 
+Please use a \verb|.bib| file to store your references. When using Overleaf to prepare your manuscript, you can upload a \verb|.bib| file or import your Mendeley or Zotero library directly as a \verb|.bib| file via the Add Files menu. You can then cite entries from it, like this: \cite{urmson2008autonomous,lees2010theoretical} and. Just remember to specify a bibliography style, as well as the filename of the \verb|.bib|.
 
-\section{Our approach}
+You can find a video tutorial here to learn more about BibTeX: \url{https://www.overleaf.com/help/97-how-to-include-a-bibliography-using-bibtex}.
 
-At present, we know of only two ways to identify TRPs in recorded conversations. One is to look at speaker changes in dialogue corpora (e.g., the Map Task, or Switchboard corpus \cite{godfrey1993switchboard, anderson1991hcrc}), and infer that where there is a speaker change, there must have been a TRP. The other is to have experts in the study of conversation annotate TRPs in transcripts of recorded conversations. The problem with the first approach is that, as mentioned above, we can only find TRPs associated with speaker changes. The second approach is not only subjective (although annotators often agree on clear cases of TRPs, they can disagree in more complex scenarios \cite{uro2024annotation}), it also does not correspond with the task that dialogue participants (or for that matter, dialogue systems) face in their daily lives. In real life, people engaging in dialogue have to predict upcoming TRPs instinctively, ``on the fly'', with very little time to contemplate. This is not the same process as identifying them after the fact in transcripts of other people's dialogue.
+This template provides two \verb|\documentclass| options for the citation and reference list style:
+\begin{description}
+       \item[Numerical style] Use \verb|\documentclass[...,num-refs]{wiley-article}| (Vancouver style)
+       \item[Author-year style] Use \verb|\documentclass[...,alpha-refs]{wiley-article}| (RSS style)
+\end{description}
 
-\subsection{Collection of data on human-detected TRPs in natural turns}
-\label{sec:dataset}
-%\footnote{The dataset we collected, along with the results, can be found here: \url{https://osf.io/k5pc9/?view_only=2844fd60993f41b7bc18dd388029f5b2}}
+If you are submitting to a journal that uses neither of the above, then instead of specifying one of these options in the document class you should use  \verb|\bibliographystyle| to specify the appropriate \verb|WileyNJD-...| style, and load the \verb|natbib| with the appropriate options as needed. If the journal provides you with an alternative .bst file to use, please upload this first, and then specify it with the \verb|\bibliographystyle| as above.
 
-\begin{figure*}[t!]
-    \centering
-    \includegraphics[width=1\linewidth]{Images/formalism.png}
-    \caption{Participants listened to a stimulus ($S$) and produced auditory responses ($R$) to indicate their perception of TRPs. Each word in the stimulus ($\word{1},\wordStart{1},\wordEnd{1}$) and the response ($\rword{1},\rwordStart{1},\rwordEnd{1}$) has a start and end time. We use the temporal midpoint($\wordMid{i} = (\wordStart{i} + \wordEnd{i})/2$) to discretize locations of both stimulus words and responses.}
-    \label{fig:formalism}
-\end{figure*}
+\subsection{Usage Examples of \texttt{wiley-article} Options}
 
+\begin{enumerate}
+       \item Using numerical, sort-by-authors citations:
+             \begin{verbatim}
+\documentclass[num-refs]{wiley-article}
+\end{verbatim}
 
-\subsubsection{Corpus of natural conversation}
+       \item Anonymised submission using author-year citations:
+             \begin{verbatim}
+\documentclass[blind,alpha-refs]{wiley-article}
+\end{verbatim}
 
-In order to get a reliable dataset of participants' instinctive, on the fly responses to TRPs in natural dialogue, we needed recorded turns from natural conversations with high audio quality and no cross-talk. Therefore, we collected a corpus, which we called the \emph{In Conversation Corpus} (ICC), containing high quality recordings of natural informal dialogues in American English. In total, the ICC contains recordings of 93 conversations. Each conversation in the ICC is approximately 25 minutes long and features a pair of undergraduate students who engage in free and unscripted conversations. Participants were seated in two sound-proofed rooms separated by a anti-reflective glass window, and communicated using a lapel microphone and headphones. The participants' speech was recorded on separate audio tracks, to avoid cross-talk (i.e., hearing the speech of one participant on the recording of the other). These conversations were then first transcribed using the transcription standards from Conversation Analysis using the automated transcription program GailBot \cite{umair2022gailbot} and subsequently checked and corrected by human annotators\footnote{The collected corpus is not publicly available due to restrictions in <anonymized> IRB regulations.}.
-From the 93 total conversations in the ICC, we selected 17 conversations (approximately 425 minutes of talk) to be used in the empirical data collection reported below.
+       \item Using \texttt{unsrtnat} for numerical, in-sequence citations:
+             \begin{verbatim}
+\documentclass{wiley-article}
+\usepackage[numbers]{natbib}
+\bibliographystyle{unsrtnat}
+\end{verbatim}
 
+       \item Using the \texttt{WileyNJD-AMA} reference style and superscript citations, two-column and serif fonts, for submission to AIChE:
 
-\subsubsection{Empirical collection of estimated TRP locations.}
-\label{sec:trpCollection}
+             \begin{verbatim}
+\documentclass[serif,twocolumn]{wiley-article}
+\usepackage[super]{natbib}
+\bibliographystyle{WileyNJD-AMA}
+\makeatletter
+\renewcommand{\@biblabel}[1]{#1.}
+\makeatother
+\end{verbatim}
 
-To obtain participants' instinctive localization of the within-turn TRPs in spoken utterances, we selected 55 turns (28.33 minutes of talk) that each contained at least two TCUs from our collected corpus. Then we had 118 native speakers of English listen to these utterances, and asked them to verbalize a brief ``backchannel'' (like \textit{hm-mm}, or \textit{yes}) at every point in time that they thought this would be appropriate.\footnote{This study was approved by the <anonymized> IRB (ID = STUDY00003236). Participants were undergraduates and were compensated as per IRB regulations.} We recorded the presented stimulus turns on the right channel of a stereo recording, and the speech of the participant on the left channel. We used two different lists of stimulus turns, and also two lists that were the reverse of the original two lists, to counterbalance for possible order effects. Participants were randomly assigned to one of the four lists. Subsequently, we used phonetic analysis program Praat \cite{boersma2001speak} as well as ELAN \cite{wittenburg-etal-2006-elan} to locate the onset of the different backchannels produced by the participants. Because we had an average of 59 participants respond to each stimulus, and each participant could respond multiple times (since there could be multiple TRPs in each stimulus), we had an average of 159 responses per stimulus turn. This allowed us to estimate both the probability that people would perceive a TRP at a specific location in the stimulus turn, as well as a distribution of the estimated location of that response.
+\end{enumerate}
 
-\begin{table}[htp!]
-    \centering
-    \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{p{3.8cm}|cc }
+\subsubsection{Third Level Heading}
 
-                                           & \multicolumn{2}{c}{\textbf{Stimulus Lists}}          \\
-                                           & List 1                                      & List 2 \\
-        \hline
-        List duration                      & 846.33                                      & 853.47 \\
-        \# of words                        & 2558                                        & 2693   \\
-        \# of participants                 & 60                                          & 58     \\
-        \# of stimuli                      & 28                                          & 27     \\
-        Avg. stimulus duration             & 30.48                                       & 31.67  \\
-        \# words per stimulus              & 91.3                                        & 99.7   \\
-        Avg. \#  of responses per stimulus & 156                                         & 162    \\
-    \end{tabular}
-    \caption{We presented participants with two stimulus lists (and their reversals), with each list containing multiple stimulus turns, and asked them to indicate their instinctive localization of within-turn TRPs through brief auditory backchannels (e.g, \emph{hm-mm, \emph{yes} etc.}). This table shows various statistics for each list. Note that duration is in seconds and \# refers to number. See Section \ref{sec:trpCollection} for further details.}
+Appendices will be published after the references. For submission they should be supplied as separate files but referred to in the text.
+
+\paragraph{Fourth Level Heading}
+% Here are examples of quotes and epigraphs.
+\begin{quote}
+       The significant problems we have cannot be solved at the same level of thinking with which we created them.\endnote{Albert Einstein said this.}
+\end{quote}
+
+\begin{epigraph}{Albert Einstein}
+       Anyone who has never made a mistake has never tried anything new.
+\end{epigraph}
+
+\subparagraph{Fifth level heading}
+Measurements should be given in SI or SI-derived units.
+Chemical substances should be referred to by the generic name only. Trade names should not be used. Drugs should be referred to by their generic names. If proprietary drugs have been used in the study, refer to these by their generic name, mentioning the proprietary name, and the name and location of the manufacturer, in parentheses.
+
+\begin{table}[bt]
+       \caption{This is a table. Tables should be self-contained and complement, but not duplicate, information contained in the text. They should be not be provided as images. Legends should be concise but comprehensive – the table, legend and footnotes must be understandable without reference to the text. All abbreviations must be defined in footnotes.}
+       \begin{threeparttable}
+              \begin{tabular}{lccrr}
+                     \headrow
+                     \thead{Variables} & \thead{JKL ($\boldsymbol{n=30}$)} & \thead{Control ($\boldsymbol{n=40}$)} & \thead{MN} & \thead{$\boldsymbol t$ (68)} \\
+                     Age at testing    & 38                                & 58                                    & 504.48     & 58 ms                        \\
+                     Age at testing    & 38                                & 58                                    & 504.48     & 58 ms                        \\
+                     Age at testing    & 38                                & 58                                    & 504.48     & 58 ms                        \\
+                     Age at testing    & 38                                & 58                                    & 504.48     & 58 ms                        \\
+                     \hiderowcolors
+                     stop alternating row colors from here onwards                                                                                             \\
+                     Age at testing    & 38                                & 58                                    & 504.48     & 58 ms                        \\
+                     Age at testing    & 38                                & 58                                    & 504.48     & 58 ms                        \\
+                     \hline  % Please only put a hline at the end of the table
+              \end{tabular}
+
+              \begin{tablenotes}
+                     \item JKL, just keep laughing; MN, merry noise.
+              \end{tablenotes}
+       \end{threeparttable}
 \end{table}
 
+\section*{acknowledgements}
+Acknowledgements should include \cite{urmson2008autonomous} contributions from anyone who does not meet the criteria for authorship (for example, to recognize contributions from people who provided technical help, collation of data, writing assistance, acquisition of funding, or a department chairperson who provided general support), as well as any funding or other support information.
 
-% How were the stimuli collected? 
+\section*{conflict of interest}
+You may be asked to provide a conflict of interest statement during the submission process. Please check the journal's author guidelines for details on what to include in this section. Please ensure you liaise with all co-authors to confirm agreement with the final statement.
 
-\subsection{Within-Turn TRP Prediction Task}
-\label{sec:task}
+\section*{Supporting Information}
 
-Since we will be evaluating the ability of text-based LLMs to recognize TRPs, we will need a principled way to convert the data obtained from the two audio channels (stimulus and response) into text input for the LLM. Here we describe how the stimuli and responses are discretized and a formal definition of the text-based TRP prediction task.
-
-\hide{
-    This section details your approach to the problem.
-    \begin{itemize}
-        \item Please be specific when describing your main approaches. You may want to include key equations and figures (though it is fine if you want to defer creating time-consuming figures until the final report).
-        \item Describe your baselines. Depending on space constraints and how standard your baseline is, you might do this in detail or simply refer to other papers for details. Default project teams can do the latter when describing the provided baseline model.
-        \item If any part of your approach is original, make it clear. For models and techniques that are not yours, provide references.
-        \item If you are using any code that you did not write yourself, make it clear and provide a reference or link.
-              When describing something you coded yourself, make it clear.
-    \end{itemize}
-}
-
-
-
-
-
-
-
-
-\subsection*{Preprocessing Multi-channel Audio Data}
-
-% why do we need to discretize
-% We can't just do tts over each utterance, because that would lose timing info, which is necessary to decide when a TRP occurs. 
-% for the ground truth, we will need U and T. 
-% Need a custom ASR approach to handle dual-channel input and synchronize them. 
-
-%\comment[vs]{\textbf{BEGIN} VS addition/rewrite}\\
-Given audio data recorded from two synchronized channels, one for each of the stimulus and the participant response, we first extract the corresponding sequences of words and their timing information, including when the word was initiated, and when it was completed, along with the text of the word.\footnote{Due to space limitations, we o not provide all details regarding the audio segmentation process. We can share this information upon request.}
-
-More formally, we can define a single stimulus $\stimulus= \langle (\word{1},\wordStart{1},\wordEnd{1}) \ldots, (\word{\turnLen},\wordStart{\turnLen},\wordEnd{\turnLen}) \rangle$ of length $\turnLen$ as a sequence of words $\word{i}$, where $\forall \word{i} \in \stimulus, \word{i} \in \vocab$, from a  fixed vocabulary $\vocab$. $S$ also includes timing information for the start ($\wordStart{i}$) and end ($\wordEnd{i}$) for each word $\word{i}$. Similarly, we can define participant responses for each stimulus as $\response= \langle (\rword{1},\rwordStart{1},\rwordEnd{1}) \ldots, (\rword{\respLen},\rwordStart{\respLen},\rwordEnd{\respLen})\rangle$. We used ELAN to \emph{manually} annotate each word along with its timing information (to the nearest tenth of a second), for both the stimulus ($\word{i},\wordStart{i},\wordEnd{i}$) and participant response ($\rword{i},\rwordStart{i},\rwordEnd{i}$) audios.\footnote{See \figref{formalism} for an example.} This allowed us to ensure that we used precise timing for words and did not accidentally consider other types of speech (e.g., in-breaths, out-breaths, laughter etc.) as responses. Further, we compute the temporal midpoint of words as $\wordMid{i} = (\wordStart{i} + \wordEnd{i})/2$. We use this mid-point to create intervals, $\interval{i}{j}, 1 \leq i,j \leq \turnLen, j=i+1$, between words. The midpoint, as opposed to the start or end of a word, is an estimate of the point before which a response may reasonably associated with the previous word.
-
-
-% \comment[vs]{Umair, maybe add a sentence for how you used ULAN and annotations to segment both the turn and the words to obtain all the $\wordStart{i}$ and $\wordEnd{j}$ information} 
-
-\begin{figure*}[hbt!]
-    \centering
-    \includegraphics[scale=0.6]{Images/example_stimulus.png}
-    \caption{Distribution of participant responses, the times at which participants agreed a TRP occurred, and model predictions of TRPs for a single stimulus $\stimulus$. The dotted lines indicate that each `true' TRP has some associated variance. The responses are binned between the temporal midpoint of words (see Section \ref{sec:task}).}
-    \label{fig:enter-label}
-\end{figure*}
-
-
-Next, we determine the proportion of participant responses, based on their start time ($\rwordStart{i}$), that fall within each interval $\intervalProportion{i}{j}$. We consider a TRP to have occurred in an interval if the proportion of responses for that interval is greater than some threshold $\tau \in [0,1]$.i.e., $\intervalProportion{i}{j} > \tau$. A TRP for an interval $\interval{i}{j}$ can be defined as $\TRP{i} \in \{0,1\}$, a binary random variable that represents the occurrence (1) or lack thereof (0) of a TRP after word $\word{i}$, i.e., whether participant word $\rword{q}$ was within an interval $\interval{i}{j}$, where $\wordMid{i} \leq \rwordStart{q} \leq \wordMid{j}$. We can then
-define $\TRPs = \langle \TRP{1} \ldots \TRP{\turnLen} \rangle$ as a binary indicator of whether or not a TRP occurred in each interval $\interval{i}{j}$ of a stimulus $\stimulus$. Finally, we define $\TRPsParticipants$ as the binary indicator of whether participants responded in all intervals of a stimulus $\stimulus$.
-
-Note that the choice of $\tau$ is important since it directly affects $\TRPsParticipants$. A large $\tau$ implies that we require a higher level of participant agreement for an interval to contain a TRP and vice versa. In this study, we used $\tau = 0.3$.
-
-% Structure for this section (Approach)
-
-
-% Task formalization. 
-% 1. What is the overall purpose of what we are trying to achieve? 
-% 2. How do we formulate a task that allows us to achieve this? 
-% 3. Why is this task useful? What is the justification for using it?
-\subsection*{Task Definition}
-
-Broadly, the inference task can be defined as identifying between 0 and $\turnLen$ TRPs in $\stimulus$. However, humans do not process all within-turn TRPs after hearing the entire stimulus. Instead, we make decisions about the existence of TRPs during the stimulus as we incrementally process it. Specifically, let a prefix $\prefix{i} = \langle \word{1},\ldots, w_i\ \rangle$ be a sequence of words such that $\forall \word{i} \in \prefix{i}, \word{i} \in \stimulus$. We can define the set of all prefixes $\prefixes$ for an stimulus $\stimulus$ that contains all possible prefixes generated from $\stimulus$, where $|\prefixes| = \turnLen$.
-
-\newtheorem{definition}{Definition}[section]
-
-\begin{definition}[Within-turn TRP Prediction]
-    Given a stimulus $\stimulus$, and set of all prefixes $\prefixes$, determine $\TRPsPrediction$, where each $\TRP{i} \in \TRPsPrediction$ occurs after each of the prefixes $\prefix{i} \in \prefixes$.
-\end{definition}
-This decomposes into a set of string classification tasks, with the turn incrementally presented with prefixes. Note that we assume each TRP is classified independently, which means we do not account for the possibility that a TRP might be conditioned on prior TRP determinations. There are several other factors that TRP determinations can be conditioned on, and for this paper, we will focus on conditioning TRP determinations on prior words in the turn (i.e., prefixes) only.\footnote{See \citet{deRuiter2006ProjectingTheEnd} and \citet{riest2015anticipation} for experimental evidence that linguistic content is sufficient for TRP prediction.}
-
-
-
-
-\section{Evaluation Metrics}
-\label{sec:measures}
-
-\subsection*{Classification Metrics}
-
-We can evaluate the performance of a model for the within-turn TRP prediction task (see Section \ref{sec:task}) by comparing its predictions $\TRPsPrediction$ against the participants' indications of TRPs $\TRPsParticipants$.  It is important to note the imbalance inherent in  the data i.e., intervals that contain TRPs are much lower than those that do not. In this case, we cannot use accuracy since a model that simply predicts the majority class for all intervals will have achieve a high value. Instead, the F1 score i.e., the harmonic mean of precision and recall, is well suited since it emphasizes models that perform well in identifying intervals that contain TRPs ($\TRP{i} = 1$), which are the vast minority of intervals.
-
-% Note that we calculate the F1 score by weighing each sample based on the Inverse Cumulative Density (ICD) of the associated class. 
-
-\subsection*{Free-Marginal Multirater Kappa}
-
-
-Multirater Kappa statistics are often used in medical and behavioral sciences as a measure of agreement over chance between multiple raters \cite{artstein2008inter}. There are a number of benifits to using Kappa in the context of our work. First, most LLMs, especially smaller ones, lack consistency over multiple predictions generated with the same prompt. Additionally, since most state-of-the-art LLMs do not provide direct access to probability distributions, the kappa statistic can be used to directly compare multiple responses from the same model. In fact, it can also be used to asses agreement between groups of models \cite{tang2024tofueval}. Second, kappa is a measure of \emph{reliability}, but not validity. It might be case the case that groups of LLMs may agree with each other, but not with human participants. Therefore, the kappa statistic offers a way to compare predictions of LLMs to human evaluators \cite{wang2024prompt}. This is especially important when considering TRPs since the subjectivity of turn-taking decisions may lead to disagreement between raters (LLMs or humans), but might not necessarily indicate an incorrect prediction.
-
-Fleiss' Kappa is typically used when there are multiple raters assessing a nominal variable \cite{fleiss1971measuring}. It assumes that the $n$ raters know a priori the number of cases $N$ that must be assigned to each category $K$. However, this assumption is not valid in our task, which consists of raters (the participants and the models) attempting to assign binary TRP categories across a number of cases (each interval is a case). Here, the rater does not know a priori the number of TRPs that occur in a specific stimulus. When this assumption does not hold, the value of Fleiss' kappa can change significantly based on the distribution of cases in each category, even when all other variables are held constant. \citet{randolph2005free} proposed a kappa measure (see Equation \ref{eq:randKappa}) that resolves this issue and does not make any assumptions about the number of cases in each category (number of TRPs in our case).
-
-\begin{align}
-    \label{eq:randKappa}
-    k_{free} = \frac{[\frac{1}{Nn(n-1)} \sum_{i=1}^{N}\sum_{j=1}^{K} n_{ij}^2 - Nn] - \frac{1}{k}}{1 - \frac{1}{k}}
-\end{align}
-
-
-We calculate two variants of the Kappa statistic. $k_{free}^{all}$ simply calculates the kappa statistic across all intervals (or cases) as previously described. However, it is important to consider that we are primarily interested in intervals in which participants' agreed that a TRP occurred, which are the vast minority of intervals. This may cause the kappa value to show an inflated level of agreement. To avoid this issue, we also calculate $k_{free}^{true}$  i.e., the kappa statistic for intervals where there was a TRP. $k_{free}^{true}$ also takes into account the density of participant responses by considering a model prediction to be `correct' if it is within some window size of the `true' label (see Figure \ref{fig:exampleVectors}).
-
-
-% \comment[vs]{Umair, please number all your equations}
-\subsection*{Temporal Distance}
-
-
-
-\begin{figure}[htp!]
-    \centering
-    \includegraphics[scale=0.6]{Images/temporal_variance.png}
-    \caption{Example of participant response proportions and corresponding model predictions in each interval of a sample stimulus $\stimulus$. In this example, $\tau = 0.3$, which means that there is one one interval in which participants agree that a TRP has occurred. Due to variance in human indications of TRP locations, we may consider a correct prediction to have occured within some window of the `true' TRP.}
-    \label{fig:exampleVectors}
-\end{figure}
-
-% First, we calculate the Normalized Mean Absolute Error (NMAE) as well as the Normalized Mean Square Error (NMSE). The NMAE penalizes a model prediction linearly while the NMSE penalizes a prediction quadratically as a function of offset (in terms of number of intervals) from the closest interval with proportion of responses greater than $\tau$. 
-
-Let $d_{i,j}^{\stimulus} \in \{1, \ldots, N\}$ be the minimum absolute distance, in terms of number of intervals, between an interval in which a response was predicted $\TRP{i}^{Predicted} = 1$ to the \emph{closest} `true' TRP $\TRP{j}^{Participants} = 1$. Additionally, let $\Distance = \langle d_{i,j}^{\stimulus}, \ldots d_{p,q}^{\stimulus}\rangle$ be a vector of these distances such that $|\Distance| = K$, where K is the number of predicted TRPs.
-
-\begin{align}
-    d_{i,j}^{\stimulus} & = min(|i-j|) \forall j \in \TRP{j}^{Participants} = 1
-\end{align}
-
-
-When discretizing participant responses (see Section \ref{sec:trpCollection}), we considered an interval as having a TRP if $\intervalProportion{i}{j} > \tau$. It may be the case that the model predicts a TRP not exactly at an interval where participants' agreed there was a TRP but in some surrounding interval. This is because there is inherent variance in human perceptions of the location of TRPs.
-
-Therefore, we define two simple measures of temporal distance between the predicted and closest `true' TRP location. the Normalized Mean Absolute Error (NMAE) and the Normalized Mean Square Error (NMSE). The NMAE is a linear measure of distance while the NMSE is a quadratic measure.
-
-\begin{align}
-    \textit{NMAE} & = \sum_{i=1}^{|\Distance|} d_{i,j}^{\stimulus}     \\
-    \textit{NMSE} & = \sum_{i=1}^{|\Distance|} (d_{i,j}^{\stimulus})^2
-\end{align}
-
-However, these simple measures do not take into account the \emph{density} of responses surrounding an interval in which a TRP occurred. For example, if the density of responses around this interval is high, then we may reasonably expect a TRP to have occurred in the surrounding intervals. We use a windowed approach to calculate this density. For each interval in which a `true' TRP occurred, $\intervalProportion{i}{j} > \tau$, we center a window of size $W$ on that interval. The density of responses is then the proportion of participant responses in the complete window, which we use to compute the \emph{density-adjusted} NMAE ($\textit{NMAE}_{DA})$.
-
-\begin{align}
-    \textit{Density}_S(\interval{i}{j}, W) & = \sum_{l=\frac{-W}{2}}^{\frac{W}{2}} \interval{i+l}{j+l}                                    \\
-    \textit{NMAE}_{DA}                     & = \sum_{i=1}^{|\Distance|} \frac{d_{i,j}^{\stimulus}}{\textit{Density}_S(\interval{i}{j},W)}
-\end{align}
-
-
-\section{Experiments and Results}
-
-We use a number of state-of-the-art LLMs to perform the binary labeling task outlined in Section \ref{sec:task}. We are particularly interested in LLMs that are pre-trained on diverse datasets and have demonstrated spoken interaction capabilities. We aim to give LLMs a fair chance to falsify our hypothesis that LLMs that are not trained specifically for spoken language tasks will exhibit low performance on the task \cite{yang2024harnessing, lin2024advancing}.
-
-There are a number of strategies for adapting LLMs for downstream tasks. Fine-tuning is the process of updating the weights of a pre-trained LLM and results in a single specialized model for a specific task. A major benefit of this approach is that training sets of arbitrary size can be used, which have been shown to drastically improve performance. However, most state-of-the-art LLMs do not allow open-source access to fine-tune models \cite{liesenfeld2024rethinking} and instead allow limited access through public facing APIs. Therefore, we employ \emph{In-context Learning} (ICL) as a task adaptation strategy that does not update model weights. Instead, ICL adapts a model to a downstream task through task demonstrations, which can be performed via prompts. It is important to note that ICL is highly sensitive to prompt choice and that prompts must be optimized through a number of strategies \cite{chang2024efficient}.
-
-We use GPT-4 Omni, a variant of GPT-4 that is able to process multi-modal information using a single end to end model \cite{achiam2023gpt}, and has achieved higher performance on benchmarks compared to other models (e.g., Gemini, Llama etc.)\footnote{Our initial experiments revealed that the Gemini and Llama models achieved substantially lower performance than GPT-4 Omni in the discrete labeling task. For brevity, we only report the results for the best performing model.}. We tested the model under two prompting conditions: \emph{expert} and \emph{participant}. In the expert condition, the model was provided theoretical background on TRPs, similar to what an expert annotator might know. In the participant condition, the model was just given an optimized version of the instructions that the human participants received.
-
-\begin{table}[htp!]
-    \centering
-    \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{lccc }
-        \textbf{Metric}      & \multicolumn{2}{c}{\textbf{Average Value}}\vspace{1mm}          \\
-                             & Participant                                            & Expert \\
-        \hline
-        % Precision & 0.126 & 0.082\\ 
-        Precision            & 0.126                                                  & 0.147  \\
-        Recall               & 0.153                                                  & 0.185  \\
-        % F1 Score & 0.216 & 0.255 \\
-        F1 Score             & 0.138                                                  & 0.164  \\
-        $k_{free}^{all}$     & 0.891                                                  & 0.860  \\
-        $k_{free}^{true}$    & 0.325                                                  & 0.201  \\
-        \textit{NMAE}        & 0.286                                                  & 0.253  \\
-        \textit{NMSE}        & 3.135                                                  & 5.36   \\
-        $\textit{NMAE}_{DA}$ & 11.28                                                  & 16.56  \\
-    \end{tabular}
-    \caption{Measures of performance of GPT-4 Omni on the discrete labeling task (see Section \ref{sec:task}) in both the participant and expert contexts.}
-    \label{tab:results}
-\end{table}
-
-
-Table \ref{tab:results} shows the results of using GPT-4 Omni to perform the within-turn TRP prediction task averaged across all stimulus lists (see Section \ref{sec:dataset}). Overall, the performance of the model reveals significant shortcomings. First, the model exhibits low precision (0.137) and recall (0.169), leading to a low F1 score (0.151), indicating frequent false positives and missed TRPs.\footnote{Here, we averaged the score for the participant and expert modes.} While the kappa statistic across all intervals ($k_{free}^{all}$ = 0.876) suggests good general agreement, the much lower kappa for true TRP intervals ($k_{free}^{true}$ = 0.263) highlights difficulties in accurately identifying true TRPs. The NMAE (0.263) and NMSE (4.248) metrics further indicate substantial deviations between intervals where the model predicted TRPs to the closest `true' TRP. The high density-adjusted NMAE ($\textit{NMAE}_{DA}$ = 13.92) highlights even greater errors when considering the density of participant responses near intervals in which TRPs occurred.
-
-There are also differences between the participant and expert conditions. The expert condition yielded higher precision (0.147) compared to the participant condition (0.126), indicating more accurate identification of TRPs. The expert condition also achieved higher recall (0.185 vs. 0.153), suggesting a better ability to detect intervals in which TRPs occur. The F1 score, balancing precision and recall, was slightly higher in the expert condition (0.164) than in the participant condition (0.138). Kappa statistics also showed variability: $k_{free}^{all}$ was higher for participants (0.891 vs. 0.860), reflecting stronger overall agreement, while $k_{free}^{true}$ was higher for participants (0.325 vs. 0.201), indicating better performance in correctly identifying true TRPs. Error metrics further demonstrated that the expert condition had lower NMAE (0.253 vs. 0.286) but higher NMSE (5.36 vs. 3.135) and significantly greater density-adjusted NMAE ($\textit{NMAE}_{DA}$ = 16.56 vs. 11.28). These results suggest that while the expert prompts provided more theoretical accuracy, the participant prompts offered more practical relevance and alignment with true TRPs.
-
-
-\section{Discussion}
-\label{sec:discussion}
-
-Half a century of turn-taking research has shown that humans use a number of cues to achieve rapid and seamless turn-transitions in natural conversation by predicting upcoming TRPs. This is vital in minimizing response delays and overlapping speech and is interactionally consequential. Ill-timed turn-taking behavior can have unintended consequences for the interpretation of utterances. For instance, longer delays in responding to an utterance often signal reluctance to produce a dispreferred response \cite{deRuiter2019TurnTaking,kendrick2015timing}. Current SDS are unable to replicate human-like turn timing \cite{skantze2021turnreview}, which decreases user satisfaction and communicative accuracy.
-
-LLMs, with their extensive pre-training on every large and diverse datasets, are well-suited to use linguistic (and increasingly multi-modal) information to perform various spoken language tasks \cite{ekstedt2020turngpt,jiang-etal-2023-response,jiang2023makes}.
-
-However, we find that LLMs underperform across several measures on a simple binary labeling task to predict within-turn TRPs. This holds true even when providing important background context for the task through various prompts (expert versus participant), showcasing this limitation despite employing a widely accepted task adaptation strategy. This limitation points to a major issue: LLMs are as yet not able to effectively utilize their vast linguistic knowledge in the domain of turn-taking. This severely limits their utility in improving the turn-taking timing of SDS.
-
-Our work offers several avenues to further explore and address this issue. First, by empirically demonstrating that current LLMs struggle with TRP prediction despite their extensive pre-training, we expose a critical bottleneck that needs to be addressed. Second, we show that high performance on written-language benchmarks does not necessarily translate to high performance on spoken language tasks. Our creation of a specialized dataset with empirical, on-the-fly human judgements on where TRPs are in natural conversational turns offers a valuable resource for the NLP research community. This dataset allows for targeted fine-tuning and evaluation of LLMs, enabling researchers to develop models that can better mimic human conversational patterns.
-
-\section{Conclusion}
-
-Even though Large Language Models show impressive performance on a range of challenging language-related tasks, it is as yet unclear whether they can be employed for determining when they can start producing their turn in spoken dialogue at a socially appropriate time. This would require them to have human-level ability to predict Transition Relevance Places, locations in speaker's contribution where they may take over the turn and start speaking. To test this ability in state-of-the-art LLMs, we collected data from humans that perform this task on-the-fly, and compared the performance of the LLMs with that of the human participants. It turned out that the performance of LLMs on this task were far below the level of that of the human participants. Apparently, the pre-training of LLMs on vast amounts of written data was not sufficient to generalize to this particular task. Possible causes for the disappointing performance could be that we haven't found the optimal prompts, and/or that the models would either need more spoken dialogue input during pre-training, or explicit fine-tuning on spoken dialogue data. Either way, the dataset that we have developed will allow researchers in the area of human-machine turn-taking to explore ways to improve the models' performance on this crucial task.
-
-% Your conclusion should not just be a summary of what you said in the paper. Imagine the reader only reads the abstract, intro and conclusion. In this case, the abstract gets the reader interested enough to even read the paper -- i.e., the "interesting" result should be mentioned in there. The intro outlines the problem and gives a sneak peak at the contribution. The conclusion has the thing X that the reader would've learned had they read the entire paper. It might have things in there that you wouldn't understand if you didn't skim the rest of the paper. Basically, you need to reward those readers who made it through your entire paper! :)  
-
-%\pagebreak
-
-\section{Limitations}
-\label{sec:future}
-
-We acknowledge several limitations in our work. First, our model was provided only with linguistic information, whereas our human participants had access to both prosodic and linguistic cues. While humans can predict TRPs using only lexico-syntactic information \cite{deRuiter2006ProjectingTheEnd}, computational models typically perform better with multi-modal inputs \cite{roddy2021neural, kurata2023multimodal}. Future work could explore if the performance of LLMs can be improved by providing non- and paraverbal cues in addition to the lexico-syntactic information.
-
-Second, although LLMs can match human performance in qualitative coding tasks and provide justifications for their decisions \cite{dunivin2024scalable}, their reasoning can differ from human reasoning \cite{bao2024llms}. While our incremental binary labeling task allows tracking of LLMs' reasoning for TRP occurrences, we did not analyze the LLM-reported reasoning in the current study. This reasoning may provide cues for providing more effective prompts to the LLM.
-
-Third, we utilized In-Context Learning (ICL) for task adaptation, which has shown high performance in some tasks \cite{chang2024efficient}, but fine-tuning on conversational data that includes diarization information could potentially improve model performance. This was not feasible due to current restrictions on fine-tuning GPT-4 Omni and similar LLMs \cite{liesenfeld2024rethinking}. We aim to explore this as fine-tuning capabilities become available.
-
-Finally, ICL performance is highly sensitive to prompt design \cite{wei2023larger}. We may not have optimized our prompts sufficiently, and it remains unclear how best to engineer prompts for within-turn TRP prediction. This, too, can be addressed in further research.
-
-\section{Ethical Impact Statement}
-
-Value alignment is a key concern shared by researchers and end-users of large language models. Being able to understand and model the values and normative expectations of not only the contents of speech, but the underlying communicative process itself is important to reduce the risk of misunderstandings, false attributions, and unmet normative expectations. Our work attempts to mitigate these shortcomings and provide the basis for understanding these normative nuances in communicative behavior. Our goal in releasing our corpus and these findings is to facilitate and further research in this domain. We hope to continue exploring the challenges in modeling turn-taking and evaluating the performance of large language models so as to highlight the strengths and weaknesses of using LLMs for spoken dialogue systems to researchers and practitioners.
-
-
-% % TODO: Umair add
-% \bibliography{refs}
+Supporting information is information that is not essential to the article, but provides greater depth and background. It is hosted online and appears without editing or typesetting. It may include tables, figures, videos, datasets, etc. More information can be found in the journal's author guidelines or at \url{http://www.wileyauthors.com/suppinfoFAQs}. Note: if data, scripts, or other artefacts used to generate the analyses presented in the paper are available via a publicly available data repository, authors should include a reference to the location of the material within their paper.

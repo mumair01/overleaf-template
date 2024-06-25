@@ -1,84 +1,117 @@
-%%%%%%%%%5 Specific Information relevant to current paper %%%%%%
+% Update article type if known
+\papertype{Original Article}
+% Include section in journal if known, otherwise delete
+\paperfield{Journal Section}
 
-% Additional packages we want to use
-%\usepackage{todonotes}       % use option "disable" to suppress notes
-\usepackage{xspace}
-\usepackage[draft]{commenting}
+\title{This is my title}
 
+% List abbreviations here, if any. Please note that it is preferred that abbreviations be defined at the first instance they appear in the text, rather than creating an abbreviations list.
+\abbrevs{ABC, a black cat; DEF, doesn't ever fret; GHI, goes home immediately.}
 
-% PAPER TITLE
-\newcommand{\longtitle}{Large Language Models Know What To Say But Not When To Speak\xspace}
-\newcommand{\shorttitle}{TRP Recognition in LLMs\xspace}
+% Include full author names and degrees, when required by the journal.
+% Use the \authfn to add symbols for additional footnotes and present addresses, if any. Usually start with 1 for notes about author contributions; then continuing with 2 etc if any author has a different present address.
+\author[1\authfn{1}]{Author One PhD}
+\author[2\authfn{1}]{Author A.~Two MD}
+\author[2\authfn{2}]{Author Three PhD}
+\author[2]{Author B.~Four}
 
-% AUTHORS
-% Name // affiliation // address // email
-\newcommand{\authorinfo}{
-    \vasanthfull \\ \tufts \\ \tuftsaddress \\ \vasanthemail
-    \and
-    \marfull \\ \tufts \\ \tuftsaddress \\ \maremail
-    \and
-    \bradfull \\ \thinkingrobots \\ \thinkingrobotsaddress \\ \brademail
-}
+\contrib[\authfn{1}]{Equally contributing authors.}
 
-% location of code repo 
-\newcommand{\hidecoderepo}{Code will be made publicly available upon acceptance of the paper}
-\newcommand{\coderepo}{\texttt{https://github.com/vasanthsarathy/opus}}
+% Include full affiliation details for all authors
+\affil[1]{Department, Institution, City, State or Province, Postal Code, Country}
+\affil[2]{Department, Institution, City, State or Province, Postal Code, Country}
 
+\corraddress{Author One PhD, Department, Institution, City, State or Province, Postal Code, Country}
+\corremail{correspondingauthor@email.com}
 
-% Declare commenters 
-\usepackage{commenting}
-\declareauthor{vs}{Vasanth}{blue}
-\declareauthor{jp}{JP}{red}
+\presentadd[\authfn{2}]{Department, Institution, City, State or Province, Postal Code, Country}
 
+\fundinginfo{Funder One, Funder One Department, Grant/Award Number: 123456, 123457 and 123458; Funder Two, Funder Two Department, Grant/Award Number: 123459}
 
-%%%%%%%%%%% General Information useful for many papers %%%%%%%%%%%%%%%%
+% Include the name of the author that should appear in the running header
+\runningauthor{Author One et al.}
 
-% List of Past collaborators
-\newcommand{\vasanthfull}{Vasanth Sarathy}
-\newcommand{\vasanthemail}{\texttt{vasanth.sarathy@tufts.edu}}
+% Declare the authors to be used in the changes package. 
+\definechangesauthor[name={Muhammad Umair}, color=orange]{MU}
+\definechangesauthor[name={Julia Mertens}, color=blue]{JM}
 
-\newcommand{\matthiasfull}{Matthias Scheutz}
-\newcommand{\matthiasemail}{\texttt{matthias.scheutz@tufts.edu}}
+% %%%%%%%%%5 Specific Information relevant to current paper %%%%%%
 
-\newcommand{\bradfull}{Bradley Oosterveld}
-\newcommand{\brademail}{\texttt{brad@thinkingrobots.ai}}
-
-\newcommand{\marfull}{Marlow Fawn}
-\newcommand{\maremail}{\texttt{marlow.fawn@tufts.edu}}
-
-\newcommand{\mattmacfull}{Matthew McWilliams}
-\newcommand{\mattmacemail}{\texttt{matthew.mcwilliams@tufts.edu}}
+% % Additional packages we want to use
+% %\usepackage{todonotes}       % use option "disable" to suppress notes
+% \usepackage{xspace}
+% \usepackage[draft]{commenting}
 
 
-% List of Affiliations
-\newcommand{\tufts}{Tufts University}
-\def\tuftsaddress{177 College Ave., \\ Medford, MA 02155}
 
-\newcommand{\thinkingrobots}{Thinking Robots}
-\newcommand{\thinkingrobotsaddress}{12 Channel St \#202, \\ Boston, MA 02210}
+% % AUTHORS
+% % Name // affiliation // address // email
+% \newcommand{\authorinfo}{
+%     \vasanthfull \\ \tufts \\ \tuftsaddress \\ \vasanthemail
+%     \and
+%     \marfull \\ \tufts \\ \tuftsaddress \\ \maremail
+%     \and
+%     \bradfull \\ \thinkingrobots \\ \thinkingrobotsaddress \\ \brademail
+% }
+
+% % location of code repo 
+% \newcommand{\hidecoderepo}{Code will be made publicly available upon acceptance of the paper}
+% \newcommand{\coderepo}{\texttt{https://github.com/vasanthsarathy/opus}}
 
 
-% Useful referencing terminology
+% % Declare commenters 
+% \declareauthor{vs}{Vasanth}{blue}
+% \declareauthor{jp}{JP}{red}
 
-\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
-\newcommand{\figppageref}[1]{Figure~\ref{fig:#1} (on page~\pageref{fig:#1})}
-\newcommand{\figpageref}[1]{Figure~\ref{fig:#1}, on page~\pageref{fig:#1}}
-\newcommand{\figpref}[1]{Figure~\ref{fig:#1}, p.~\pageref{fig:#1}}
-\newcommand{\tabref}[1]{Table~\ref{tab:#1}}
-\newcommand{\tabpageref}[1]{Table~\ref{tab:#1}, on page~\pageref{tab:#1}}
-\newcommand{\secref}[1]{Section~\ref{sec:#1}}
-\newcommand{\secppageref}[1]{Section~\ref{sec:#1} (on page~\pageref{sec:#1})}
-\newcommand{\secpageref}[1]{Section~\ref{sec:#1}, on page~\pageref{sec:#1},}
-\newcommand{\apriori}[0]{{\em a~priori\/}}
-\newcommand{\etal}[0]{{\em et~al.\/}}
-\newcommand{\adhoc}[0]{{\em ad~hoc\/}}
 
-\newcommand{\eg}{{\em e.g.}}
-\newcommand{\ie}{{\em i.e.}}
-\newcommand{\vs}{{\em vs.}\xspace}
-\newcommand{\etc}{{\em etc}\xspace}
+% %%%%%%%%%%% General Information useful for many papers %%%%%%%%%%%%%%%%
 
-% Hide or show different aspects 
-\newcommand{\hide}[1]{}
+% % List of Past collaborators
+% \newcommand{\vasanthfull}{Vasanth Sarathy}
+% \newcommand{\vasanthemail}{\texttt{vasanth.sarathy@tufts.edu}}
+
+% \newcommand{\matthiasfull}{Matthias Scheutz}
+% \newcommand{\matthiasemail}{\texttt{matthias.scheutz@tufts.edu}}
+
+% \newcommand{\bradfull}{Bradley Oosterveld}
+% \newcommand{\brademail}{\texttt{brad@thinkingrobots.ai}}
+
+% \newcommand{\marfull}{Marlow Fawn}
+% \newcommand{\maremail}{\texttt{marlow.fawn@tufts.edu}}
+
+% \newcommand{\mattmacfull}{Matthew McWilliams}
+% \newcommand{\mattmacemail}{\texttt{matthew.mcwilliams@tufts.edu}}
+
+
+% % List of Affiliations
+% \newcommand{\tufts}{Tufts University}
+% \def\tuftsaddress{177 College Ave., \\ Medford, MA 02155}
+
+% \newcommand{\thinkingrobots}{Thinking Robots}
+% \newcommand{\thinkingrobotsaddress}{12 Channel St \#202, \\ Boston, MA 02210}
+
+
+% % Useful referencing terminology
+
+% \newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+% \newcommand{\figppageref}[1]{Figure~\ref{fig:#1} (on page~\pageref{fig:#1})}
+% \newcommand{\figpageref}[1]{Figure~\ref{fig:#1}, on page~\pageref{fig:#1}}
+% \newcommand{\figpref}[1]{Figure~\ref{fig:#1}, p.~\pageref{fig:#1}}
+% \newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+% \newcommand{\tabpageref}[1]{Table~\ref{tab:#1}, on page~\pageref{tab:#1}}
+% \newcommand{\secref}[1]{Section~\ref{sec:#1}}
+% \newcommand{\secppageref}[1]{Section~\ref{sec:#1} (on page~\pageref{sec:#1})}
+% \newcommand{\secpageref}[1]{Section~\ref{sec:#1}, on page~\pageref{sec:#1},}
+% \newcommand{\apriori}[0]{{\em a~priori\/}}
+% \newcommand{\etal}[0]{{\em et~al.\/}}
+% \newcommand{\adhoc}[0]{{\em ad~hoc\/}}
+
+% \newcommand{\eg}{{\em e.g.}}
+% \newcommand{\ie}{{\em i.e.}}
+% \newcommand{\vs}{{\em vs.}\xspace}
+% \newcommand{\etc}{{\em etc}\xspace}
+
+% % Hide or show different aspects 
+% \newcommand{\hide}[1]{}
 
 
