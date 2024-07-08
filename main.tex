@@ -51,7 +51,7 @@
 % Examples:
 % =======================
 %% Example: Using numerical, sort-by-authors citations.
-\documentclass[num-refs]{wiley-article}
+%\documentclass[num-refs]{wiley-article}
 
 %% Example: Using author-year citations and anonymising submission
 % \documentclass[blind,alpha-refs]{wiley-article}
@@ -63,14 +63,16 @@
 
 %% Example: Using WileyNJD-AMA reference style and superscript
 %%          citations, two-column and serif fonts for AIChE
-% \documentclass[serif,twocolumn,lineno]{wiley-article}
-% \usepackage[super]{natbib}
+\documentclass[serif, lineno,alpha-refs]{wiley-article}
+
+% \setcitestyle{square, comma, numbers,sort&compress, super}
 % \bibliographystyle{WileyNJD-AMA}
+% \usepackage[super]{natbib}
 % \makeatletter
 % \renewcommand{\@biblabel}[1]{#1.}
 % \makeatother
 
-% Add additional packages here if required
+%-----------  Add additional packages here if required
 \usepackage{siunitx}
 
 
@@ -108,13 +110,29 @@
 % and set <dim> to something 5cm or larger.
 
 \usepackage{amsmath}
+\usepackage{anyfontsize}
 
+\usepackage[final]{changes}
+%\usepackage[final]{changes}
+% Redefine the deleted markup to avoid ulem
+\setdeletedmarkup{\textcolor{red}{\sout{#1}}}
 
-\usepackage{changes}
+% This is used to ensure that all the tables do not exceed the maximum paper width. 
+\usepackage{adjustbox}
+\usepackage{array}
+
+% Load hyperref last to avoid conflicts
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+\usepackage{ifthen}
+\usepackage{xparse}
+
 
 \input{defs.tex}
 
 \begin{document}
+
+% Set up front matter
+\papertype{Original Article}
 
 \begin{frontmatter}
        \maketitle

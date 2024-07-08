@@ -1,117 +1,61 @@
 % Update article type if known
 \papertype{Original Article}
 % Include section in journal if known, otherwise delete
-\paperfield{Journal Section}
+% \paperfield{Journal Section}
 
-\title{This is my title}
+\title{Can language models trained on written monologue learn to predict spoken dialogue?}
 
 % List abbreviations here, if any. Please note that it is preferred that abbreviations be defined at the first instance they appear in the text, rather than creating an abbreviations list.
-\abbrevs{ABC, a black cat; DEF, doesn't ever fret; GHI, goes home immediately.}
+% \abbrevs{ABC, a black cat; DEF, doesn't ever fret; GHI, goes home immediately.}
 
 % Include full author names and degrees, when required by the journal.
 % Use the \authfn to add symbols for additional footnotes and present addresses, if any. Usually start with 1 for notes about author contributions; then continuing with 2 etc if any author has a different present address.
-\author[1\authfn{1}]{Author One PhD}
-\author[2\authfn{1}]{Author A.~Two MD}
-\author[2\authfn{2}]{Author Three PhD}
-\author[2]{Author B.~Four}
+\author[1\authfn{1}]{Muhammad Umair}
+\author[2\authfn{1}]{Julia Beret Mertens}
+\author[2]{Lena Warnke}
+\author[1,2]{Jan P. de Ruiter}
 
-\contrib[\authfn{1}]{Equally contributing authors.}
+\contrib[\authfn{1}]{The two lead authors contributed equally to this work.}
 
 % Include full affiliation details for all authors
-\affil[1]{Department, Institution, City, State or Province, Postal Code, Country}
-\affil[2]{Department, Institution, City, State or Province, Postal Code, Country}
+\affil[1]{Department of Computer Science, Tufts University Medford, MA, USA, 02155}
+\affil[2]{Department of Psychology, Tufts University Medford, MA, USA, 02155}
 
-\corraddress{Author One PhD, Department, Institution, City, State or Province, Postal Code, Country}
-\corremail{correspondingauthor@email.com}
+\corraddress{Julia Mertens, Department of Psychology, Tufts University, Medford, MA, USA, 02155}
+\corremail{julia.mertens0@gmail.com}
 
-\presentadd[\authfn{2}]{Department, Institution, City, State or Province, Postal Code, Country}
+% \presentadd[\authfn{2}]{Department, Institution, City, State or Province, Postal Code, Country}
 
-\fundinginfo{Funder One, Funder One Department, Grant/Award Number: 123456, 123457 and 123458; Funder Two, Funder Two Department, Grant/Award Number: 123459}
+% \fundinginfo{Funder One, Funder One Department, Grant/Award Number: 123456, 123457 and 123458; Funder Two, Funder Two Department, Grant/Award Number: 123459}
 
 % Include the name of the author that should appear in the running header
-\runningauthor{Author One et al.}
+\runningauthor{Umair et al.}
 
-% Declare the authors to be used in the changes package. 
+
+% Declare authors for the changes package
+% \definechangesauthor[name={Muhammad Umair}, color=red]{MU}
 \definechangesauthor[name={Muhammad Umair}, color=orange]{MU}
-\definechangesauthor[name={Julia Mertens}, color=blue]{JM}
-
-% %%%%%%%%%5 Specific Information relevant to current paper %%%%%%
-
-% % Additional packages we want to use
-% %\usepackage{todonotes}       % use option "disable" to suppress notes
-% \usepackage{xspace}
-% \usepackage[draft]{commenting}
+\definechangesauthor[name={Julia Mertens}, color=magenta]{JM}
+\definechangesauthor[name={Lena Warnke}, color=teal]{LW}
+\definechangesauthor[name={J.P de Ruiter}, color=cyan]{JP}
 
 
+% Create a new if conditional
+\newif\ifblindreview
+\blindreviewfalse
 
-% % AUTHORS
-% % Name // affiliation // address // email
-% \newcommand{\authorinfo}{
-%     \vasanthfull \\ \tufts \\ \tuftsaddress \\ \vasanthemail
-%     \and
-%     \marfull \\ \tufts \\ \tuftsaddress \\ \maremail
-%     \and
-%     \bradfull \\ \thinkingrobots \\ \thinkingrobotsaddress \\ \brademail
-% }
+% Define a command to check for the blind review option
+\makeatletter
+\if@blindreview
+    \blindreviewtrue
+\fi
+\makeatother
 
-% % location of code repo 
-% \newcommand{\hidecoderepo}{Code will be made publicly available upon acceptance of the paper}
-% \newcommand{\coderepo}{\texttt{https://github.com/vasanthsarathy/opus}}
-
-
-% % Declare commenters 
-% \declareauthor{vs}{Vasanth}{blue}
-% \declareauthor{jp}{JP}{red}
-
-
-% %%%%%%%%%%% General Information useful for many papers %%%%%%%%%%%%%%%%
-
-% % List of Past collaborators
-% \newcommand{\vasanthfull}{Vasanth Sarathy}
-% \newcommand{\vasanthemail}{\texttt{vasanth.sarathy@tufts.edu}}
-
-% \newcommand{\matthiasfull}{Matthias Scheutz}
-% \newcommand{\matthiasemail}{\texttt{matthias.scheutz@tufts.edu}}
-
-% \newcommand{\bradfull}{Bradley Oosterveld}
-% \newcommand{\brademail}{\texttt{brad@thinkingrobots.ai}}
-
-% \newcommand{\marfull}{Marlow Fawn}
-% \newcommand{\maremail}{\texttt{marlow.fawn@tufts.edu}}
-
-% \newcommand{\mattmacfull}{Matthew McWilliams}
-% \newcommand{\mattmacemail}{\texttt{matthew.mcwilliams@tufts.edu}}
-
-
-% % List of Affiliations
-% \newcommand{\tufts}{Tufts University}
-% \def\tuftsaddress{177 College Ave., \\ Medford, MA 02155}
-
-% \newcommand{\thinkingrobots}{Thinking Robots}
-% \newcommand{\thinkingrobotsaddress}{12 Channel St \#202, \\ Boston, MA 02210}
-
-
-% % Useful referencing terminology
-
-% \newcommand{\figref}[1]{Figure~\ref{fig:#1}}
-% \newcommand{\figppageref}[1]{Figure~\ref{fig:#1} (on page~\pageref{fig:#1})}
-% \newcommand{\figpageref}[1]{Figure~\ref{fig:#1}, on page~\pageref{fig:#1}}
-% \newcommand{\figpref}[1]{Figure~\ref{fig:#1}, p.~\pageref{fig:#1}}
-% \newcommand{\tabref}[1]{Table~\ref{tab:#1}}
-% \newcommand{\tabpageref}[1]{Table~\ref{tab:#1}, on page~\pageref{tab:#1}}
-% \newcommand{\secref}[1]{Section~\ref{sec:#1}}
-% \newcommand{\secppageref}[1]{Section~\ref{sec:#1} (on page~\pageref{sec:#1})}
-% \newcommand{\secpageref}[1]{Section~\ref{sec:#1}, on page~\pageref{sec:#1},}
-% \newcommand{\apriori}[0]{{\em a~priori\/}}
-% \newcommand{\etal}[0]{{\em et~al.\/}}
-% \newcommand{\adhoc}[0]{{\em ad~hoc\/}}
-
-% \newcommand{\eg}{{\em e.g.}}
-% \newcommand{\ie}{{\em i.e.}}
-% \newcommand{\vs}{{\em vs.}\xspace}
-% \newcommand{\etc}{{\em etc}\xspace}
-
-% % Hide or show different aspects 
-% \newcommand{\hide}[1]{}
-
-
+% Define the anonymize command
+\newcommand{\anonymize}[2]{%
+    \ifblindreview
+        #2%
+    \else
+        #1%
+    \fi
+}

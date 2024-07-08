@@ -1,6 +1,42 @@
 % % NOTATION
 % %%%%%%%%%%%%
 
+% Here is we should define our own custom commands!!! 
+
+% Define additional settings and commands
+\newtheorem{hyp}{Hypothesis}
+\newtheorem{subhyp}{Hypothesis}
+\renewcommand\thesubhyp{\thehyp\alph{subhyp}}
+
+% Here are the various links to the repositories. 
+\newcommand{\repolink}{\url{https://github.com/mumair01/GPT-Monologue-to-Dialogue}}
+\newcommand{\anonymousrepolink}{\url{https://anonymous.4open.science/r/GPT-Monologue-to-Dialogue-49B3/README.md}}
+\newcommand{\osflink}{\url{https://osf.io/fxn8y/?view_only=9baf4033a2cb49cfaf107f9a753ab445}}
+\newcommand{\anonymousosflink}{\url{https://osf.io/fxn8y/?view_only=c70f49ab84a149b6b999be606f619eb2}}
+
+% This is the notation for words and surprisal used in this work. 
+% \newcommand{\word}[1]{w_{#1}}
+\newcommand{\token}[1]{\mathit{t_{#1}}}
+
+\NewDocumentCommand{\word}{m o}{%
+    w_{#1}%
+    \IfValueT{#2}{^{#2}}%
+}
+\newcommand{\sequence}{\mathit{S}}
+\newcommand{\wordSurprisal}{\mathit{Surprisal}}
+
+
+\newcommand{\secondTurnSurprisal}[1]{\wordSurprisal^{\mathit{#1}}_{\mathit{secondTurn}}}
+
+
+\newcommand{\wordSurprisalFormula}{-\log P(\word{i} \mid \word{1}, \ldots, \word{i-1})}
+\newcommand{\tokenSurprisalFormula}{-\log P(\token{i} \mid \token{1}, \ldots, \token{i-1})}
+\newcommand{\secondTurnWordsSurprisalFormula}{\sum_{i=1}^{N} - \log P(\word{i}[2] \mid \word{1}[2], \ldots, \word{i-1}[2], \word{1}[1], \ldots, \word{K}[1])}
+\newcommand{\SecondTurnEOTSurprisalFormula}{-\log P(\token{EOT} \mid \word{1}[2], \ldots, \word{N}[2], \word{1}[1], \ldots, \word{K}[1])}
+
+
+
+
 % % general math
 % \DeclareMathOperator*{\argmax}{arg\,max}
 % \DeclareMathOperator*{\argmin}{arg\,min}
